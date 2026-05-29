@@ -1,0 +1,32 @@
+name: Build and Deploy
+
+# 向主干 main 分支推送代码时触发部署
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.22.23'
+          yarn-version: '1.22.19'
+      
+      - name: Install dependencies
+        run: yarn install
+      
+      - name: Build project
+        run: yarn run build
+      
+      - name: Deploy to EdgeOne Pages
+        run: npx edgeone pages deploy .next -n next-chat -t ${{ secrets.EDGEONE_API_TOKEN }} -e .env
+        env:
+          EDGEONE_API_TOKEN: ${{ secrets.EDGEONE_API_TOKEN }}
