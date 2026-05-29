@@ -18,10 +18,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22.17.1'
-          yarn-version: '1.22.19'
+          cache: 'yarn'
       
       - name: Install dependencies
-        run: yarn install
+        run: yarn --frozen-lockfile
       
       - name: Build project
         run: yarn run build
